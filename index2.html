@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Youth Civic Engagement</title>
+    <style>
+      /* Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        line-height: 1.6;
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+      }
+
+      main {
+        width: 70%; /* Main content occupies 70% of the width */
+        padding: 20px;
+        margin-left: 20px;
+      }
+
+      /* Sidebar for NPC profiles */
+      #npcSidebar {
+        width: 30%; /* Sidebar occupies 30% of the width */
+        padding: 20px;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+      }
+
+      /* Container for NPC Profiles */
+      #npcProfiles {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        margin-bottom: 30px; /* Space between profiles and problem box */
+      }
+
+      .npcProfile {
+        width: 120px;
+        height: 120px;
+        margin-right: 20px;
+        text-align: center;
+        border-radius: 15px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer; /* Pointer on hover */
+      }
+
+      .npcProfile:hover {
+        transform: scale(1.1); /* Zoom effect on hover */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Optional shadow */
+      }
+
+      .npcProfile img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+      }
+
+      .npcProfile h3 {
+        font-size: 0.8rem; /* Adjust font size to fit names */
+        color: #333;
+        word-wrap: break-word;
+        max-width: 100px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
+      /* Profile Box Styling */
+      #profile {
+        margin-bottom: 20px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        height: 70%; /* Occupy more vertical space */
+      }
+
+      /* Problem Posts Section */
+      #problemPosts {
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        height: 100%; /* Adjust height for better spacing */
+        overflow-y: auto;
+      }
+
+      .problemPost {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .problemPost .npcProfile {
+        margin-right: 15px; /* Space between NPC profile and text */
+      }
+
+      .problemPost h4 {
+        font-size: 1.1rem;
+        color: #4caf50;
+      }
+
+      .problemPost p {
+        font-size: 0.9rem;
+        color: #333;
+        max-width: 600px;
+      }
+
+      header {
+        background-color: #4caf50;
+        padding: 20px;
+        color: white;
+        text-align: left;
+      }
+
+      header h1 {
+        font-size: 2rem;
+      }
+
+      header p {
+        font-size: 1rem;
+        margin-top: 10px;
+      }
+
+      nav {
+        margin-top: 20px;
+        text-align: left;
+      }
+
+      nav a {
+        margin: 0 15px;
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+
+      nav a:hover {
+        background-color: #45a049;
+      }
+
+      section {
+        margin-top: 40px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+      }
+
+      section:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      footer {
+        margin-top: 40px;
+        background-color: #333;
+        color: white;
+        padding: 10px;
+        text-align: center;
+      }
+
+      /* Profile Picture */
+      #profilePic {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+      }
+
+      #uploadedFeed {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .uploadItem {
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+      }
+
+      .uploadItem img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-right: 15px;
+      }
+
+      .uploadItem div {
+        display: inline-block;
+        vertical-align: top;
+        max-width: 600px;
+        word-wrap: break-word;
+      }
+
+      .uploadItem div h3 {
+        font-size: 1rem;
+        margin-bottom: 5px;
+      }
+      * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: #007bff;
+            padding: 15px;
+            color: #fff;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        /* Main Layout */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        .title {
+            font-size: 28px;
+            margin: 20px 0;
+        }
+
+        .section {
+            background: #ffffff;
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .animated-section {
+            transition: transform 0.5s ease;
+        }
+
+        .animated-section:hover {
+            transform: scale(1.03);
+        }
+
+        .leaderboard, .news, .rewards {
+            margin: 10px 0;
+        }
+
+        .leaderboard h2, .news h2, .rewards h2 {
+            font-size: 22px;
+            color: #007bff;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f8f9fa;
+            margin: 5px 0;
+            border-radius: 8px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 20px;
+            padding: 15px;
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Youth Civic Engagement</h1>
+        <p>Empowering Youth, Transforming Communities</p>
+      </header>
+
+      <nav>
+        <a href="#upload" onclick="showSection('upload')">Upload</a>
+        <a href="sign.html">Sign In / Sign Up</a> <!-- New link to sign.html -->
+        <a href="#groups" onclick="showSection('groups')">Groups</a>
+        <a href="#profile" onclick="showSection('profile')">Profile</a>
+    </nav>
+    
+
+      <section id="upload" class="content-section">
+        <h2>Upload Photos & Texts</h2>
+        <input type="file" id="fileUpload" accept="image/*, .txt, .pdf" />
+        <textarea
+          id="textUpload"
+          placeholder="Write something about your upload..."
+        ></textarea>
+        <button onclick="handleUpload()">Upload</button>
+        <div id="uploadFeedback"></div>
+      </section>
+
+      <section id="messaging" class="content-section" style="display: none">
+        <h2>Messaging</h2>
+        <input type="text" id="messageInput" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+        <div id="messagesContainer"></div>
+      </section>
+
+      <section id="groups" class="content-section" style="display: none">
+        <h2>Groups</h2>
+        <button onclick="joinGroup()">Join Community Cleanup Group</button>
+        <div id="groupFeedback"></div>
+      </section>
+
+      <section id="profile" class="content-section" style="display: none">
+        <h2>Update Your Profile</h2>
+        <img
+          id="profilePic"
+          src="https://via.placeholder.com/100"
+          alt="Profile Picture"
+        />
+        <input type="file" id="uploadProfilePic" accept="image/*" />
+        <textarea id="bio" placeholder="Write your bio..."></textarea>
+        <button onclick="saveProfile()">Save Profile</button>
+        <div id="profileFeedback"></div>
+      </section>
+
+      <section id="uploadedFeed">
+        <h2>Recent Uploads</h2>
+          <div id="uploadedItems"> 
+            <div class="main-content">
+              <h1 class="title">Youth Engagement Platform</h1>
+              
+              <!-- News Section -->
+              <div class="section animated-section news">
+                  <h2>Current News</h2>
+                  <div class="list-item">Local Event on Climate Awareness</div>
+                  <div class="list-item">Youth Leadership Conference Scheduled</div>
+                  <div class="list-item">Community Cleanup Initiative</div>
+              </div>
+      
+              <!-- Leaderboard Section -->
+              <div class="section animated-section leaderboard">
+                  <h2>Leaderboard - Youth Ambassadors</h2>
+                  <div class="list-item">
+                      <span>Jane Doe</span><span>1200 Points</span>
+                  </div>
+                  <div class="list-item">
+                      <span>John Smith</span><span>1100 Points</span>
+                  </div>
+                  <div class="list-item">
+                      <span>Emily Brown</span><span>1050 Points</span>
+                  </div>
+              </div>
+      
+              <!-- Rewards Section -->
+              <div class="section animated-section rewards">
+                  <h2>Volunteer Rewards</h2>
+                  <div class="list-item">
+                      <span>Completed Local Event Assistance</span><span>500 Points</span>
+                  </div>
+                  <div class="list-item">
+                      <span>Organized a Workshop</span><span>300 Points</span>
+                  </div>
+                  <div class="list-item">
+                      <span>Supported Mental Health Program</span><span>200 Points</span>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- NPC Sidebar -->
+    <div id="npcSidebar">
+      <h2>NPC Profiles</h2>
+      <div id="npcProfiles">
+        <div class="npcProfile">
+          <img src="https://via.placeholder.com/60" alt="NPC1" />
+          <h3>Alex Morgan</h3>
+        </div>
+        <div class="npcProfile">
+          <img src="https://via.placeholder.com/60" alt="NPC2" />
+          <h3>Olivia Jackson</h3>
+        </div>
+        <div class="npcProfile">
+          <img src="https://via.placeholder.com/60" alt="NPC3" />
+          <h3>Ethan Smith</h3>
+        </div>
+        <div class="npcProfile">
+          <img src="https://via.placeholder.com/60" alt="NPC4" />
+          <h3>Chloe Davis</h3>
+        </div>
+        <div class="npcProfile">
+          <img src="https://via.placeholder.com/60" alt="NPC5" />
+          <h3>Ryan Lee</h3>
+        </div>
+      </div>
+
+      <!-- Problem Posts Section -->
+      <div id="problemPosts">
+        <div class="problemPost">
+          <div class="npcProfile">
+            <img src="https://via.placeholder.com/60" alt="NPC1" />
+            <h3>Alex Morgan</h3>
+          </div>
+          <div>
+            <h4>Electricity Outage in Local Area</h4>
+            <p>
+              Alex Morgan posted: "There has been a continuous electricity
+              outage in our neighborhood for the last two days. We need urgent
+              intervention from the local authorities."
+            </p>
+          </div>
+        </div>
+        <div class="problemPost">
+          <div class="npcProfile">
+            <img src="https://via.placeholder.com/60" alt="NPC2" />
+            <h3>Olivia Jackson</h3>
+          </div>
+          <div>
+            <h4>Noise Pollution</h4>
+            <p>
+              Olivia Jackson posted: "The loud construction noise in our area is
+              unbearable. It's disturbing everyone's peace and affecting
+              health!"
+            </p>
+          </div>
+        </div>
+        <div class="problemPost">
+          <div class="npcProfile">
+            <img src="https://via.placeholder.com/60" alt="NPC3" />
+            <h3>Ethan Smith</h3>
+          </div>
+          <div>
+            <h4>Water Scarcity</h4>
+            <p>
+              Ethan Smith posted: "Water levels are dropping fast, and we're
+              running out of clean water supply. Urgent measures need to be
+              taken before it gets worse!"
+            </p>
+          </div>
+        </div>
+        <div class="problemPost">
+          <div class="npcProfile">
+            <img src="https://via.placeholder.com/60" alt="NPC4" />
+            <h3>Chloe Davis</h3>
+          </div>
+          <div>
+            <h4>Deforestation Concerns</h4>
+            <p>
+              Chloe Davis posted: "Our local forest is being cleared for
+              commercial purposes. This is a huge threat to wildlife and
+              climate. We must take action now!"
+            </p>
+          </div>
+        </div>
+        <div class="problemPost">
+          <div class="npcProfile">
+            <img src="https://via.placeholder.com/60" alt="NPC5" />
+            <h3>Ryan Lee</h3>
+          </div>
+          <div>
+            <h4>Stray Pets Problem</h4>
+            <p>
+              Ryan Lee posted: "There are too many stray dogs and cats roaming
+              the streets. They pose a danger to public health and need to be
+              rescued."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer></footer>
+
+    <script>
+      let uploadedContent = [];
+
+      // Function to show and hide sections
+      function showSection(sectionId) {
+        const sections = document.querySelectorAll(".content-section");
+        sections.forEach((section) => (section.style.display = "none"));
+        document.getElementById(sectionId).style.display = "block";
+      }
+
+      // Handle Upload
+      function handleUpload() {
+        const text = document.getElementById("textUpload").value;
+        const file = document.getElementById("fileUpload").files[0];
+        const feedback = document.getElementById("uploadFeedback");
+
+        if (file || text) {
+          const newItem = {
+            text: text,
+            file: file ? URL.createObjectURL(file) : null,
+          };
+          uploadedContent.push(newItem);
+          displayUploads();
+          feedback.innerHTML = `Uploaded: ${text || "No text"} <br>File: ${
+            file ? file.name : "No file uploaded"
+          }`;
+        } else {
+          feedback.innerHTML = "Please provide either text or a file.";
+        }
+      }
+
+      // Display Uploaded Content in the Feed
+      function displayUploads() {
+        const uploadedItems = document.getElementById("uploadedItems");
+        uploadedItems.innerHTML = "";
+
+        uploadedContent.forEach((item) => {
+          const div = document.createElement("div");
+          div.classList.add("uploadItem");
+
+          if (item.file) {
+            const img = document.createElement("img");
+            img.src = item.file;
+            div.appendChild(img);
+          }
+
+          const textDiv = document.createElement("div");
+          const h3 = document.createElement("h3");
+          h3.textContent = item.text || "No description provided.";
+          textDiv.appendChild(h3);
+          div.appendChild(textDiv);
+
+          uploadedItems.appendChild(div);
+        });
+      }
+
+      // Handle Messaging
+      function sendMessage() {
+        const messageInput = document.getElementById("messageInput").value;
+        const messagesContainer = document.getElementById("messagesContainer");
+
+        if (messageInput.trim()) {
+          const newMessage = document.createElement("div");
+          newMessage.innerText = messageInput;
+          messagesContainer.appendChild(newMessage);
+          document.getElementById("messageInput").value = "";
+        }
+      }
+
+      // Handle Group Joining
+      function joinGroup() {
+        const groupFeedback = document.getElementById("groupFeedback");
+        groupFeedback.innerHTML =
+          'You have successfully joined the "Community Cleanup" group!';
+      }
+
+      // Handle Profile Saving
+      function saveProfile() {
+        const bio = document.getElementById("bio").value;
+        const profilePic = document.getElementById("profilePic");
+        const profileFeedback = document.getElementById("profileFeedback");
+
+        const file = document.getElementById("uploadProfilePic").files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            profilePic.src = event.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+
+        profileFeedback.innerHTML = `Profile updated! <br>Bio: ${bio}`;
+      }
+
+      showSection("upload");
+    </script>
+  </body>
+</html>
